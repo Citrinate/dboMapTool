@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<!-- This file only exists for the purpose of the live demo.  If possible, index.php should be used instead. -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Interactive Map</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+	<body onload="init();" style="margin: 8px;">
+		<table class="titlebar">
+		    <tr>
+		        <td class="titlebar-topleft"></td>
+		        <td class="titlebar-top"></td>
+		        <td class="titlebar-topright"></td>
+		    </tr>
+		    <tr>
+		        <td class="titlebar-left"></td>
+		        <td>
+		        	<a href="?map=world">
+		                <div class="small-button" onClick="window.location.href='?map=world';">
+		                    <table>
+		                        <tr>
+		                            <td class="blue-bottom-left"></td>
+		                            <td class="blue-bottom-center">
+		                                World Map
+		                            </td>
+		                            <td class="blue-bottom-right"></td>
+		                        </tr>
+		                    </table>
+		                </div>
+		            </a>
+		            <a href="javascript:switchView('world-zones');">
+		                <div id="world-zones-button" class="small-button" onClick="switchView('world-zones');">
+		                    <table>
+		                        <tr>
+		                            <td class="blue-bottom-left"></td>
+		                            <td class="blue-bottom-center">
+		                                World Zones
+		                            </td>
+		                            <td class="blue-bottom-right"></td>
+		                        </tr>
+		                    </table>
+		                </div>
+		            </a>
+		            <a href="javascript:switchView('dungeons');">
+		                <div id="dungeons-button" class="small-button " onClick="switchView('dungeons');">
+		                    <table>
+		                        <tr>
+		                            <td class="blue-bottom-left"></td>
+		                            <td class="blue-bottom-center">
+		                                Dungeons
+		                            </td>
+		                            <td class="blue-bottom-right"></td>
+		                        </tr>
+		                    </table>
+		                </div>
+		            </a>
+		            <a href="javascript:switchView('tmqs');">
+		                <div id="tmqs-button" class="small-button " onClick="switchView('tmqs');">
+		                    <table>
+		                        <tr>
+		                            <td class="blue-bottom-left"></td>
+		                            <td class="blue-bottom-center">
+		                                TMQs
+		                            </td>
+		                            <td class="blue-bottom-right"></td>
+		                        </tr>
+		                    </table>
+		                </div>
+		            </a>
+		            <a href="javascript:switchView('tlqs');">
+		                <div id="tlqs-button" class="small-button " onClick="switchView('tlqs');">
+		                    <table>
+		                        <tr>
+		                            <td class="blue-bottom-left"></td>
+		                            <td class="blue-bottom-center">
+		                                TLQs
+		                            </td>
+		                            <td class="blue-bottom-right"></td>
+		                        </tr>
+		                    </table>
+		                </div>
+		            </a>
+		            <div class="map-selection" id="world-zones-selections" style="display:none">
+		                <span class="%%fearland_status%%">
+		                    <a href="?map=fearland">Fearland</a>
+		                </span> | <span class="%%franfran-desert-north_status%%">
+		                    <a href="?map=franfran-desert-north">Franfran Desert (North)</a>
+		                </span> | <span class="%%guild-dojo_status%%">
+		                    <a href="?map=guild-dojo">Guild Dojo</a>
+		                </span> | <span class="%%kame-house_status%%">
+		                    <a href="?map=kame-house">Kame House</a>
+		                </span> | <span class="%%karin-forest_status%%">
+		                    <a href="?map=karin-forest">Karin Forest</a>
+		                </span> | <span class="%%mushroom-rocks-north_status%%">
+		                    <a href="?map=mushroom-rocks-north">Mushroom Rocks (North)</a>
+		                </span> | <span class="%%mushroom-rocks-south_status%%">
+		                    <a href="?map=mushroom-rocks-south">Mushroom Rocks (South)</a>
+		                </span> | <span class="%%papaya-island_status%%">
+		                    <a href="?map=papaya-island">Papaya Island</a>
+		                </span> | <span class="%%porunga-rocks-north_status%%">
+		                    <a href="?map=porunga-rocks-north">Porunga Rocks (North)</a>
+		                </span> | <span class="%%porunga-rocks-south_status%%">
+		                    <a href="?map=porunga-rocks-south">Porunga Rocks (South)</a>
+		                </span> | <span class="%%west-city_status%%">
+		                    <a href="?map=west-city">West City</a>
+		                </span> | <span class="%%westlands_status%%">
+		                    <a href="?map=westlands">Westlands</a>
+		                </span> | <span class="%%yahhoi-east_status%%">
+		                    <a href="?map=yahhoi-east">Yahhoi (East)</a>
+		                </span> | <span class="%%yahhoi-west_status%%">
+		                    <a href="?map=yahhoi-west">Yahhoi (West)</a>
+		                </span>
+		            </div>
+		            <div class="map-selection" id="dungeons-selections" style="display:none">
+		            	<span class="%%dragon-cave_status%%">
+		                    <a href="?map=dragon-cave">Dragon Cave</a>
+		                </span> | <span>
+		                	Full Research Plant
+		                </span> | <span>
+		                    Hoi Poi Stone Mine
+		                </span> | <span>
+		                    Pilaf's Castle
+		                </span> | <span>
+		                    Pilaf's Museum
+		                </span> | <span>
+		                    Red Pants Army HQ
+		                </span> | <span>
+		                    Red Pants Army's Robotics Facility
+		                </span> | <span class="%%red-ribbon-army-hq-ruins_status%%">
+		                    <a href="?map=red-ribbon-army-hq-ruins">Red Ribbon Army HQ Ruins</a>
+		                </span> | <span class="%%red-ribbon-army-underground-base-ruins_status%%">
+		                    <a href="?map=red-ribbon-army-underground-base-ruins">Red Ribbon Army Underground Base Ruins</a>
+		                </span> | <span>
+		                    Secret Waterfall Cave
+		                </span> | <span class="%%underground-waterway_status%%">
+		                    <a href="?map=underground-waterway">Underground Waterway</a>
+		                </span> | <span class="%%yahhoi-fort_status%%">
+		                    <a href="?map=yahhoi-fort">Yahhoi Fort</a>
+		                </span>
+		            </div>
+		            <div class="map-selection" id="tmqs-selections" style="display:none">
+		                <span class="%%tmq-1_status%%">
+		                    <a href="?map=tmq-1">TMQ 1</a>
+		                </span> | <span class="%%tmq-2-part-1_status%%">
+		                    <a href="?map=tmq-2-part-1">TMQ 2 (Part 1)</a>
+		                </span> | <span class="%%tmq-2-part-3_status%%">
+		                    <a href="?map=tmq-2-part-3">TMQ 2 (Part 3)</a>
+		                </span> | <span class="%%tmq-3-day_status%%">
+		                    <a href="?map=tmq-3-day">TMQ 3 (Day)</a>
+		                </span> | <span class="%%tmq-3-night_status%%">
+		                    <a href="?map=tmq-3-night">TMQ 3 (Night)</a>
+		                </span> | <span class="%%tmq-4_status%%">
+		                    <a href="?map=tmq-4">TMQ 4</a>
+		                </span> | <span class="%%tmq-5_status%%">
+		                    <a href="?map=tmq-5">TMQ 5</a>
+		                </span> | <span class="%%tmq-6_status%%">
+		                    <a href="?map=tmq-6">TMQ 6</a>
+		                </span>
+		            </div>
+		            <div class="map-selection" id="tlqs-selections" style="display:none">
+		                <span class="%%tlq-1_status%%">
+		                    <a href="?map=tlq-1">TLQ 1</a>
+		                </span> | <span class="%%tlq-2_status%%">
+		                    <a href="?map=tlq-2">TLQ 2</a>
+		                </span> | <span class="%%tlq-3_status%%">
+		                    <a href="?map=tlq-3">TLQ 3</a>
+		                </span>
+		            </div>
+		        </td>
+		        <td class="titlebar-right"></td>
+		    </tr>
+		    <tr>
+		        <td class="titlebar-bottomleft"></td>
+		        <td class="titlebar-bottom"></td>
+		        <td class="titlebar-bottomright"></td>
+		    </tr>
+		</table>
+		<br>
+		Use the map below as a tool to send maps of specific locations to your friends or to as a guide to find map revealers,
+		teleport NPCs, and other points of interest.
+		<br>
+		<br>
+		<table onselectstart="return false" ondragstart="return false">
+		    <tr>
+		        <td>
+		            <div class="map-enlarged" id="smallmap" style="position: relative;" oncontextmenu="addmarker(event,0); return false;">
+		                <div id="markerssmall" style="position: absolute; z-index: 1;"></div>
+		                <div class="map-enlarged-background" style="position: absolute; top: 0px; left: 0px;"></div>
+		                <div class="map-enlarged-background-gradient" oncontextmenu="return false"></div>
+		                <table>
+		                    <tr>
+		                        <td class="map-enlarged-image" id="map1"></td>
+		                        <td class="map-enlarged-image" id="map2"></td>
+		                        <td class="map-enlarged-image" id="map3"></td>
+		                    </tr>
+		                    <tr>
+		                        <td class="map-enlarged-image" id="map4"></td>
+		                        <td class="map-enlarged-image" id="map5"></td>
+		                        <td class="map-enlarged-image" id="map6"></td>
+		                    </tr>
+		                    <tr>
+		                        <td class="map-enlarged-image" id="map7"></td>
+		                        <td class="map-enlarged-image" id="map8"></td>
+		                        <td class="map-enlarged-image" id="map9"></td>
+		                    </tr>
+		                </table>
+		            </div>
+		            <a id="link" href="" style="text-decoration: none;">
+		                <table width="100%">
+		                    <tbody>
+		                        <tr>
+		                            <td class="lightblue-button-top-left"></td>
+		                            <td class="lightblue-button-top">
+		                                <a id="link2" href="" style="color: #fff; text-decoration: none;">Link to this Map</a>
+		                            </td>
+		                            <td class="lightblue-button-top-right"></td>
+		                        </tr>
+		                        <tr>
+		                            <td class="lightblue-button-bottom-left"></td>
+		                            <td class="lightblue-button-bottom"></td>
+		                            <td class="lightblue-button-bottom-right"></td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		            </a>
+		            <div class="release">
+		                Use the above link to share this map along with the markers you've placed on it.
+		            </div>
+		        </td>
+		        <td style="vertical-align: top; padding-left: 16px;">
+		            <div class="bigmap-background" style="position: relative;" onclick="jumpmap(event)" oncontextmenu="addmarker(event,1)">
+		                <div id="bigmap" style="float: left; background: url(img/map/%%mapnum%%.jpg) no-repeat;">
+		                    <div id="markersbig" style="position: absolute; z-index: 1;"></div>
+		                    <div style="position: absolute; z-index: 2;">
+		                        <img oncontextmenu="return false;" id="mapbox" src="img/50p_white.png" style="position: absolute; display: none;">
+		                    </div>
+		                </div>
+		                <div class="map-gradient" oncontextmenu="return false"></div>
+		                <div class="instructions" oncontextmenu="return false">
+		                    Click on the map or use the W, A, S, and D keys to position the zoomed in map on the left.<br><br>
+		                    Right click on either map to place a marker and right click on a marker to delete it.<br><br>
+		                    Marker Style:
+		                    <br>
+		                    <div id="selectmarker0" class="marker-style-selected"><a href="javascript:void(0)" onclick="changemarker(0);"><img src="img/marker0.png"></a></div>
+		                    <div id="selectmarker1" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(1);"><img src="img/marker1.png"></a></a></div>
+		                    <div id="selectmarker2" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(2);"><img src="img/marker2.png"></a></div>
+		                    <div id="selectmarker3" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(3);"><img src="img/marker3.png"></a></div>
+		                    <div id="selectmarker4" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(4);"><img src="img/marker4.png"></a></div>
+		                    <div id="selectmarker5" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(5);"><img src="img/marker5.png"></a></div>
+		                    <div id="selectmarker6" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(6);"><img src="img/marker6.png"></a></div>
+		                    <div id="selectmarker7" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(7);"><img src="img/marker7.png"></a></div>
+		                    <div id="selectmarker8" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(8);"><img src="img/marker8.png"></a></div>
+		                    <div id="selectmarker9" class="marker-style"><a href="javascript:void(0)" onclick="changemarker(9);"><img src="img/marker9.png"></a></div>
+		                    <div class="filters">
+		                        <a href="javascript:void(0)" onclick="changefilter(0);">
+		                            <div id="filter0" class="filter-%%filter0_status%%">Show Markers</div>
+		                        </a>
+		                        <a href="javascript:void(0)" onclick="changefilter(1);">
+		                            <div id="filter1" class="filter-%%filter1_status%%">Show Map Revealers</div>
+		                        </a>
+		                        <a href="javascript:void(0)" onclick="changefilter(2);">
+		                            <div id="filter2" class="filter-%%filter2_status%%">Show Teleporters</div>
+		                        </a>
+		                    </div>
+		                </div>
+		            </div>
+		        </td>
+		    </tr>
+		</table>
+        <script type="text/javascript" src="js/map.js"></script>
+		<script type="text/javascript">
+			var map_data = JSON.parse('{"world":{"display_name":"World","map":"world"},"fearland":{"display_name":"Fearland","map":"fearland"},"westlands":{"display_name":"Westlands","map":"westlands"},"mushroom-rocks-north":{"display_name":"Mushroom Rocks (North)","map":"mushroom_rocks_north"},"mushroom-rocks-south":{"display_name":"Mushroom Rocks (South)","map":"mushroom_rocks_south"},"yahhoi-east":{"display_name":"Yahhoi (East)","map":"yahhoi_east"},"yahhoi-west":{"display_name":"Yahhoi (West)","map":"yahhoi_west"},"porunga-rocks-north":{"display_name":"Porunga Rocks (North)","map":"porunga_rocks_north"},"porunga-rocks-south":{"display_name":"Porunga Rocks (South)","map":"porunga_rocks_south"},"franfran-desert-north":{"display_name":"Franfran Desert (North)","map":"franfran_desert_north"},"karin-forest":{"display_name":"Karin Forest","map":"karin_forest"},"west-city":{"display_name":"West City","map":"west_city"},"world-martial-arts-tournament-city":{"display_name":"World Martial Arts Tournament City","map":"world_martial_arts_tournament_city"},"kame-house":{"display_name":"Kame House","map":"kame_house"},"papaya-island":{"display_name":"Papaya Island","map":"papaya_island"},"guild-dojo":{"display_name":"Guild Dojo","map":"guild_dojo"},"yahhoi-fort":{"display_name":"Yahhoi Fort","map":"yahhoi_fort"},"dragon-cave":{"display_name":"Dragon Cave","map":"dragon_cave"},"underground-waterway":{"display_name":"Underground Waterway","map":"underground_waterway"},"red-ribbon-army-underground-base-ruins":{"display_name":"Red Ribbon Army Underground Base Ruins","map":"red_ribbon_army_underground_base_ruins"},"red-ribbon-army-hq-ruins":{"display_name":"Red Ribbon Army HQ Ruins","map":"red_ribbon_army_hq_ruins"},"tmq-1":{"display_name":"TMQ 1","map":"tmq_1"},"tmq-2-part-1":{"display_name":"TMQ 2 (Part 1)","map":"tmq_2_part_1"},"tmq-2-part-2":{"display_name":"TMQ 2 (Part 2)","map":"kame_house"},"tmq-2-part-3":{"display_name":"TMQ 3 (Part 3)","map":"tmq_1"},"tmq-3-day":{"display_name":"TMQ 3 (Day)","map":"tmq_3_day"},"tmq-3-night":{"display_name":"TMQ 3 (Night)","map":"tmq_3_night"},"tmq-4":{"display_name":"TMQ 4","map":"tmq_4"},"tmq-5":{"display_name":"TMQ 5","map":"tmq_5"},"tmq-6":{"display_name":"TMQ 6","map":"tmq_6"},"tlq-1":{"display_name":"TLQ 1","map":"tlq_1"},"tlq-2":{"display_name":"TLQ 2","map":"tlq_2"},"tlq-3":{"display_name":"TLQ 3","map":"tlq_3"},"fuel-research-plant":{"display_name":"Full Research Plant","map":null},"hoi-poi-stone-mine":{"display_name":"Hoi Poi Stone Mine","map":null},"pilafs-castle":{"display_name":"Pilaf\'s Castle","map":null},"pilafs-museum":{"display_name":"Pilaf\'s Museum","map":null},"red-pants-army-hq":{"display_name":"Red Pants Army HQ","map":null},"red-pants-armys-robotics-facility":{"display_name":"Red Pants Army\'s Robotics Facility","map":null},"secret-waterfall-cave":{"display_name":"Secret Waterfall Cave","map":null}}');
+
+
+			var marker = (new URL(window.location)).searchParams.get("markers");
+			var filter = (new URL(window.location)).searchParams.get("filter");
+			var current = (new URL(window.location)).searchParams.get("coord");
+			var mapname = (new URL(window.location)).searchParams.get("map");
+
+			marker = marker == null ? "" : marker;
+			filter = filter == null ? false : filter;
+			current = current == null ? 0 : parseInt(current);
+			mapname = mapname == null ? "world" : mapname;
+
+			// parse filter input
+			if(!isNaN(filter) && filter.length == 3) {
+				var temp = [];
+
+				for(var i = 0; i < filter.length; i++) {
+					if(filter.charAt(i) == "0" || filter.charAt(i) == "1") {
+						temp[i] = parseInt(filter.charAt(i));
+					} else {
+						filter = false;
+						break;
+					}
+				}
+
+				if(filter !== false) {
+					filter = temp;
+				}
+            } else {
+            	filter = false;
+            }
+
+            // parse marker input
+            if(!isNaN(marker) && marker.length % 11 == 0) {
+            	var temp = [];
+            	var marker_count = 0;
+
+            	for(var i = 0; i < marker.length; i+=11) {
+            		temp[marker_count++] = [
+            			parseInt(marker.substr(i + 1, 5)), // x coordinate
+            			parseInt(marker.substr(i + 6, 5)), // y coordinate
+            			parseInt(marker.charAt(i)),		   // marker type
+            			0								   // necessary flag so that the script knows this marker isn't deleted
+            		];
+            	}
+
+                marker = temp;
+            } else {
+            	marker = false;
+            }
+
+            marker = marker == false ? [] : marker;
+            filter = filter == false ? (mapname == "world" ? [1,0,0] : [1,1,1]) : filter;
+			var mapnum = map_data[mapname]["map"];
+
+			var map_file = document.createElement("script");
+		    map_file.src = "js/maps/" + mapnum + ".js";
+		    document.body.appendChild(map_file);
+
+		    document.body.innerHTML = document.body.innerHTML.replace(/%%filter0_status%%/g, filter[0] == 0 ? "off" : "on");
+		    document.body.innerHTML = document.body.innerHTML.replace(/%%filter1_status%%/g, filter[1] == 0 ? "off" : "on");
+		    document.body.innerHTML = document.body.innerHTML.replace(/%%filter2_status%%/g, filter[2] == 0 ? "off" : "on");
+		    document.body.innerHTML = document.body.innerHTML.replace(/%%mapnum%%/g, mapnum);
+
+		    for(var key in map_data) {
+		    	var reg = new RegExp("%%" + key + "_status%%", "g");
+
+		    	if(mapname == key) {
+		    		document.body.innerHTML = document.body.innerHTML.replace(reg, "active-map-selection");	
+		    	} else {
+		    		document.body.innerHTML = document.body.innerHTML.replace(reg, "");	
+		    	}
+		    }
+
+		    switch(mapname) {
+		    	case "dragon-cave":
+		    	case "red-ribbon-army-hq-ruins":
+		    	case "red-ribbon-army-underground-base-ruins":
+		    	case "underground-waterway":
+		    	case "yahhoi-fort":
+		    		switchView('dungeons');
+		    		break;
+
+		    	case "tmq-1":
+		    	case "tmq-2-part-1":
+		    	case "tmq-2-part-3":
+		    	case "tmq-3-day":
+		    	case "tmq-3-night":
+		    	case "tmq-4":
+		    	case "tmq-5":
+		    	case "tmq-6":
+		    		switchView('tmqs');
+		    		break;
+
+		    	case "tlq-1":
+		    	case "tlq-2":
+		    	case "tlq-3":
+		    		switchView('tlqs');
+		    		break;
+
+		    	default:
+		    		switchView('world-zones');
+		    		break;
+		    }
+		</script>
+    </body>
+</html>
